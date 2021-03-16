@@ -19,7 +19,6 @@
         android:layout_gravity="right|bottom"
         android:layout_margin="20dp"
         android:background="@drawable/plus_btn_shape"
-
         />
 
 </FrameLayout>
