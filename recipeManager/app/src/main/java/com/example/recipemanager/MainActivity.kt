@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.drawer_layout.*
+import kotlinx.android.synthetic.main.drawer_view.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.drawer_layout)
 
         initToolbar()
     }
@@ -19,8 +23,20 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(layout_toolbar as androidx.appcompat.widget.Toolbar)
         supportActionBar?.setDisplayShowCustomEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
     }
 
+    //뒤로가기 처리
+    override fun onBackPressed() {
+        if(main_layout_drawer.isDrawerOpen(GravityCompat.START)){
+            main_layout_drawer.closeDrawers()
+        }
+        else {
+            super.onBackPressed()
+        }
+    }
+    
     override fun onCreateNavigateUpTaskStack(builder: TaskStackBuilder?) {
         
         super.onCreateNavigateUpTaskStack(builder)
@@ -35,7 +51,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //툴바 엑션 처리
+        when (item.itemId) {
+            //네비게이션 드로어 열기
+            android.R.id.home -> {
+                main_layout_drawer.openDrawer(GravityCompat.START)
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 }
+
 
