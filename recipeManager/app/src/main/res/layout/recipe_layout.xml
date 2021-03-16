@@ -4,7 +4,8 @@
     android:id="@+id/layout_recipe"
     android:layout_width="match_parent"
     android:layout_height="130dp"
-    android:background="@drawable/shadow"
+    android:background="@drawable/list_item_effect"
+    android:clickable="true"
     >
 
     <ImageView
