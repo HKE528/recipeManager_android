@@ -8,18 +8,28 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.drawer_view.*
 
 class MainActivity : AppCompatActivity() {
+
+    var addRecipeViewList: ArrayList<View> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_layout)
 
         initToolbar()
 
+        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_1, null))
+        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_2, null))
+
+        view_pager_add_recipe.adapter = ViewPagerAdapter(addRecipeViewList)
+
         btn_plus.setOnClickListener {
             layout_add_recipe.visibility = View.VISIBLE
+            btn_plus.visibility = View.INVISIBLE
         }
     }
 
