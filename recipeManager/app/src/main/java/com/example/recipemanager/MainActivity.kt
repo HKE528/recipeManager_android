@@ -21,16 +21,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.drawer_layout)
 
         initToolbar()
-
-        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_1, null))
-        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_2, null))
-
-        view_pager_add_recipe.adapter = ViewPagerAdapter(addRecipeViewList)
+        initAddRecipeView()
 
         btn_plus.setOnClickListener {
             layout_add_recipe.visibility = View.VISIBLE
             btn_plus.visibility = View.INVISIBLE
         }
+    }
+
+    private fun initAddRecipeView()
+    {
+        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_1, null))
+        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_2, null))
+
+        view_pager_add_recipe.adapter = ViewPagerAdapter(addRecipeViewList)
     }
 
     private fun initToolbar() {
