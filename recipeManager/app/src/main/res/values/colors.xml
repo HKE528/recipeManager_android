@@ -11,4 +11,5 @@
     <color name="blue">#3F51B5</color>
     <color name="transparent">#00000000</color>
     <color name="charcoal">#313131</color>
+    <color name="item">#E6E6FF</color>
 </resources>
