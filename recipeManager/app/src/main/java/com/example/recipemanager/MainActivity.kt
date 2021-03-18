@@ -17,6 +17,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.drawer_layout)
 
         initToolbar()
+
+        btn_plus.setOnClickListener {
+            layout_add_recipe.visibility = View.VISIBLE
+        }
     }
 
     private fun initToolbar() {
