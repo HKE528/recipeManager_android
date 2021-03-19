@@ -10,6 +10,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,16 +23,19 @@ import kotlinx.android.synthetic.main.drawer_view.*
 class MainActivity : AppCompatActivity() {
 
     var addRecipeViewList: ArrayList<View> = ArrayList()
+    var isVisibleAddView = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_layout)
 
         initToolbar()
-        //initAddRecipeView()
+        initAddRecipeView()
 
         btn_plus.setOnClickListener {
-
+            layout_add_recipe.visibility = View.VISIBLE
+            btn_plus.visibility = View.INVISIBLE
+            isVisibleAddView = true
         }
     }
 
@@ -49,13 +55,14 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
     }
 
-    private fun showPopupIsExit(title : String? = null, text: String = "내용")
+    private fun showPopupIsExit()
     {
         val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(text)
+                .setMessage("정말로 레시피 추가를 종료하시겠습니까?")
                 .setPositiveButton("네") {_, _ ->
-                    finish()
+                    isVisibleAddView = false
+                    layout_add_recipe.visibility = View.INVISIBLE
+                    btn_plus.visibility = View.VISIBLE
                 }
                 .setNegativeButton("아니오", null)
 
@@ -67,6 +74,10 @@ class MainActivity : AppCompatActivity() {
         if(main_layout_drawer.isDrawerOpen(GravityCompat.START)){
             main_layout_drawer.closeDrawers()
         }
+        else if(isVisibleAddView){
+            showPopupIsExit()
+        }
+
         else {
             super.onBackPressed()
         }
