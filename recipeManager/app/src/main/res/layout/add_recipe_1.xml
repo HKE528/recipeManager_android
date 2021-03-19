@@ -80,7 +80,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_weight="30"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -95,6 +96,5 @@
             android:layout_marginRight="20dp"
             android:background="@drawable/edit_text_outline"/>
     </LinearLayout>
-
 
 </LinearLayout>

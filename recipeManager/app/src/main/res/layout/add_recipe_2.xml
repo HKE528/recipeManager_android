@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    android:layout_margin="10dp"
     android:background="@color/item"
     >
 
@@ -19,7 +18,7 @@
         android:id="@+id/et_add_recipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="10"
+        android:layout_weight="80"
         android:hint="한줄당 하나씩"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
