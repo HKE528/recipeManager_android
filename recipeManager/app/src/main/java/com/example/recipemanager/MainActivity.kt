@@ -1,11 +1,16 @@
 package com.example.recipemanager
 
+import android.app.AlertDialog
 import android.app.TaskStackBuilder
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
@@ -21,11 +26,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.drawer_layout)
 
         initToolbar()
-        initAddRecipeView()
+        //initAddRecipeView()
 
         btn_plus.setOnClickListener {
-            layout_add_recipe.visibility = View.VISIBLE
-            btn_plus.visibility = View.INVISIBLE
+
         }
     }
 
@@ -43,6 +47,19 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
+    }
+
+    private fun showPopupIsExit(title : String? = null, text: String = "내용")
+    {
+        val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(text)
+                .setPositiveButton("네") {_, _ ->
+                    finish()
+                }
+                .setNegativeButton("아니오", null)
+
+        dlg.show()
     }
 
     //뒤로가기 처리
