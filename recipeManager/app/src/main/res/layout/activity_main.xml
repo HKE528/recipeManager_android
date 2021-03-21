@@ -27,7 +27,7 @@
             <include
                 layout="@layout/add_recipe"
                 android:id="@+id/layout_add_recipe"
-                android:visibility="invisible">
+                android:visibility="visible">
             </include>
 
             <ImageButton

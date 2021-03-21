@@ -13,17 +13,18 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.add_recipe_1.*
+import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.drawer_view.*
 
 class MainActivity : AppCompatActivity() {
 
-    var addRecipeViewList: ArrayList<View> = ArrayList()
     var isVisibleAddView = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,21 +32,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.drawer_layout)
 
         initToolbar()
-        initAddRecipeView()
+
+        initAddPager()
 
         btn_plus.setOnClickListener {
             layout_add_recipe.visibility = View.VISIBLE
             btn_plus.visibility = View.INVISIBLE
             isVisibleAddView = true
+            view_pager_add_recipe.currentItem = 0
         }
     }
 
-    private fun initAddRecipeView()
+    private fun initAddPager()
     {
-        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_1, null))
-        addRecipeViewList.add(layoutInflater.inflate(R.layout.add_recipe_2, null))
-
-        view_pager_add_recipe.adapter = ViewPagerAdapter(addRecipeViewList)
+        view_pager_add_recipe.adapter = AddPagerAdapter(supportFragmentManager)
     }
 
     private fun initToolbar() {

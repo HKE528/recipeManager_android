@@ -25,7 +25,7 @@
         android:background="@drawable/edit_text_outline"/>
 
     <Button
-        android:id="@+id/btn_add_recipe_complete"
+        android:id="@+id/btn_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
