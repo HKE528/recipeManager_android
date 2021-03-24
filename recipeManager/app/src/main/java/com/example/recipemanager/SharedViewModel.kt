@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class SharedViewModel : ViewModel() {
-    val selected = MutableLiveData<String>()
+    val selected = MutableLiveData<RecipeDTO>()
 
-    fun select(item: String) {
+    fun select(item: RecipeDTO) {
         selected.value = item
     }
 }
