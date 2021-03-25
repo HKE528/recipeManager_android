@@ -35,9 +35,7 @@ class MainActivity : AppCompatActivity() {
         initAddPager()
 
         btn_plus.setOnClickListener {
-            layout_add_recipe.visibility = View.VISIBLE
-            btn_plus.visibility = View.INVISIBLE
-            isVisibleAddView = true
+            visibleAddView()
             view_pager_add_recipe.currentItem = 0
         }
     }
@@ -60,13 +58,24 @@ class MainActivity : AppCompatActivity() {
         val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
                 .setMessage("정말로 레시피 추가를 종료하시겠습니까?")
                 .setPositiveButton("네") {_, _ ->
-                    isVisibleAddView = false
-                    layout_add_recipe.visibility = View.INVISIBLE
-                    btn_plus.visibility = View.VISIBLE
+                    invisibleAddView()
                 }
                 .setNegativeButton("아니오", null)
 
         dlg.show()
+    }
+
+    private fun invisibleAddView()
+    {
+        layout_add_recipe.visibility = View.INVISIBLE
+        btn_plus.visibility = View.VISIBLE
+        isVisibleAddView = false
+    }
+    private fun visibleAddView()
+    {
+        layout_add_recipe.visibility = View.VISIBLE
+        btn_plus.visibility = View.INVISIBLE
+        isVisibleAddView = true
     }
 
     //뒤로가기 처리
