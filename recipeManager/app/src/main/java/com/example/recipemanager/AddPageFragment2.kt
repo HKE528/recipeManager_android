@@ -13,13 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.recipe_layout.*
 
 class AddPageFragment2 : Fragment() {
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private lateinit var recipeDTO: RecipeDTO
-    private lateinit var text : String
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -43,8 +44,9 @@ class AddPageFragment2 : Fragment() {
         btn_complete.setOnClickListener{
             recipeDTO.recipe = et_add_recipe.text.toString()
 
-            Toast.makeText(context, recipeDTO.name + " 등록 완료", Toast.LENGTH_SHORT).show()
+            (activity as MainActivity).invisibleAddView()
 
+            Toast.makeText(context, recipeDTO.name + " 등록 완료", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         dlg.show()
     }
 
-    private fun invisibleAddView()
+    fun invisibleAddView()
     {
         layout_add_recipe.visibility = View.INVISIBLE
         btn_plus.visibility = View.VISIBLE
