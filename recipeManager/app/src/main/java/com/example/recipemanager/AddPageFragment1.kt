@@ -41,7 +41,7 @@ class AddPageFragment1 : Fragment() {
 
         btn_next.setOnClickListener(){item ->
             setDTO()
-            Toast.makeText(context, "다음", Toast.LENGTH_SHORT).show()
+
             sharedViewModel.select(recipeDTO)
 
             (activity as MainActivity).view_pager_add_recipe.currentItem = 1
