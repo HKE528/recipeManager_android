@@ -24,8 +24,7 @@ import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.drawer_view.*
 
 class MainActivity : AppCompatActivity() {
-
-    var isVisibleAddView = false
+    private var isVisibleAddView = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

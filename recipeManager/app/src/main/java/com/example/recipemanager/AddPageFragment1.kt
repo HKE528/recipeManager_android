@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.add_recipe_1.*
 import kotlinx.android.synthetic.main.add_recipe_2.*
@@ -42,6 +43,8 @@ class AddPageFragment1 : Fragment() {
             setDTO()
             Toast.makeText(context, "다음", Toast.LENGTH_SHORT).show()
             sharedViewModel.select(recipeDTO)
+
+            (activity as MainActivity).view_pager_add_recipe.currentItem = 1
         }
     }
 
