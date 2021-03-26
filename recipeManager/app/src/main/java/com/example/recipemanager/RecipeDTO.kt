@@ -1,9 +1,9 @@
 package com.example.recipemanager
 
 data class RecipeDTO(
-        var img: String?,
-        var name: String?,
+        var img: String? = null,
+        var name: String? = null,
         var category: String? = "미분류",
-        var ingredient: String?,
-        var recipe: String?
+        var ingredient: String? = null,
+        var recipe: String? = null
 )

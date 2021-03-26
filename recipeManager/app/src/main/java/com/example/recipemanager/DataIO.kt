@@ -1,28 +1,49 @@
 package com.example.recipemanager
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 
-class DataIO(private val recipeDTO: RecipeDTO) : AppCompatActivity() {
-    private val pref = this.getPreferences(0)
+class App : Application() {
 
-    private fun saveData() {
-        val editor = pref.edit()
-
-        editor.putString("img", recipeDTO.img)
-                .putString("name", recipeDTO.name)
-                .putString("category", recipeDTO.category)
-                .putString("ingredient", recipeDTO.ingredient)
-                .putString("recipe", recipeDTO.recipe)
-                .apply()
+    companion object {
+        lateinit var prefs : DataSharedPreferences
     }
 
-    private fun loadData() : RecipeDTO{
-        return RecipeDTO(
-                img = pref.getString("img", null),
-                name = pref.getString("name", null),
-                category = pref.getString("category", null),
-                ingredient = pref.getString("ingredient", null),
-                recipe = pref.getString("recipe", null)
-        )
+    override fun onCreate() {
+        prefs = DataSharedPreferences(applicationContext)
+        super.onCreate()
+    }
+}
+
+class DataSharedPreferences(context: Context) {
+    private val fileName = "recipe_data"
+    private val prefs : SharedPreferences = context.getSharedPreferences(fileName, 0)
+
+    fun setData(key : String, value : String?) {
+        prefs.edit().putString(key, value).apply()
+    }
+
+    fun getData(key : String): String? {
+        return prefs.getString(key, null).toString()
+    }
+}
+
+class DataIO(val recipeDTO: RecipeDTO) {
+    private val makeGson = GsonBuilder().create()
+    private val typeToken : TypeToken<RecipeDTO> = object : TypeToken<RecipeDTO>() {}
+
+
+    fun saveRecipe() {
+        val dataJson = makeGson.toJson(recipeDTO, typeToken.type)
+        App.prefs.setData(recipeDTO.name.toString(), dataJson)
+    }
+
+    fun loadRecipe() : RecipeDTO{
+        var dataJson = App.prefs.getData(recipeDTO.name.toString())
+
+        return makeGson.fromJson(dataJson, RecipeDTO::class.java)
     }
 }
