@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         initList()
     }
 
-    private fun initList()
+    fun initList()
     {
         recipes = DataIO().loadALL()
         recipe_list.adapter = ListViewAdapter(recipes)

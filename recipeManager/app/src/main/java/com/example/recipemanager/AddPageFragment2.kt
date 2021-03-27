@@ -49,6 +49,8 @@ class AddPageFragment2 : Fragment() {
 
             DataIO().saveRecipe(recipeDTO)
 
+            (activity as MainActivity).initList()
+
             Toast.makeText(context, recipeDTO.name + " 등록 완료", Toast.LENGTH_SHORT).show()
         }
     }
