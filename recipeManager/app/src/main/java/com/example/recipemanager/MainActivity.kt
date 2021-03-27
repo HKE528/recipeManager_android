@@ -27,7 +27,8 @@ import kotlinx.android.synthetic.main.recipe_list_view.*
 
 class MainActivity : AppCompatActivity() {
     private var isVisibleAddView = false
-    private val testArray =  ArrayList<RecipeDTO>()
+    //private val recipes : ArrayList<RecipeDTO> =  DataIO().loadALL()
+    private lateinit var recipes : ArrayList<RecipeDTO>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         initApp()
 
-        val test = RecipeDTO(null, "계란후라이", "간식", "ㅁㄴㅇㄹ", "ㅁㄴㅇㄹ")
-        testArray.add(test)
-
-        val listAdapter = ListViewAdapter(testArray)
-        recipe_list.adapter = listAdapter
+        //val listAdapter = ListViewAdapter(recipes)
+        //recipe_list.adapter = listAdapter
 
 
         btn_plus.setOnClickListener {
@@ -52,6 +50,13 @@ class MainActivity : AppCompatActivity() {
     {
         initToolbar()
         initAddPager()
+        initList()
+    }
+
+    private fun initList()
+    {
+        recipes = DataIO().loadALL()
+        recipe_list.adapter = ListViewAdapter(recipes)
     }
 
     private fun initAddPager()
