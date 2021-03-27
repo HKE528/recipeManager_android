@@ -47,7 +47,7 @@ class AddPageFragment2 : Fragment() {
 
             recipeDTO.recipe = et_add_recipe.text.toString()
 
-            DataIO(recipeDTO).saveRecipe()
+            DataIO().saveRecipe(recipeDTO)
 
             Toast.makeText(context, recipeDTO.name + " 등록 완료", Toast.LENGTH_SHORT).show()
         }

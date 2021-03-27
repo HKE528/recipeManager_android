@@ -32,13 +32,17 @@ class DataSharedPreferences(context: Context) {
     fun getData(key : String): String? {
         return prefs.getString(key, null).toString()
     }
+
+    fun getALL() : MutableCollection<out Any?> {
+        return prefs.all.values
+    }
 }
 
-class DataIO(private val recipeDTO: RecipeDTO) {
-    private val makeGson = GsonBuilder().create()
-    private val typeToken : TypeToken<RecipeDTO> = object : TypeToken<RecipeDTO>() {}
+class DataIO() {
+    //private val makeGson = GsonBuilder().create()
+    //private val typeToken : TypeToken<RecipeDTO> = object : TypeToken<RecipeDTO>() {}
 
-    fun saveRecipe() {
+    fun saveRecipe(recipeDTO: RecipeDTO) {
         //val dataJson = makeGson.toJson(recipeDTO, typeToken.type)
         //App.prefs.setData(recipeDTO.name.toString(), dataJson)
 
@@ -46,10 +50,25 @@ class DataIO(private val recipeDTO: RecipeDTO) {
         App.prefs.setData(recipeDTO.name.toString(), json)
     }
 
-    fun loadRecipe() : RecipeDTO{
-        val dataJson = App.prefs.getData(recipeDTO.name.toString())
+    fun loadRecipe(name : String) : RecipeDTO{
+        val dataJson = App.prefs.getData(name)
 
         //return makeGson.fromJson(dataJson, RecipeDTO::class.java)
         return Json.decodeFromString<RecipeDTO> (dataJson.toString())
+    }
+
+    fun loadALL() : ArrayList<RecipeDTO> {
+        val datas : ArrayList<RecipeDTO> = ArrayList()
+        val col : MutableCollection<out Any?> = App.prefs.getALL()
+        val it : Iterator<Any?> = col.iterator()
+
+        while (it.hasNext()) {
+            val value = it.next().toString()
+            val dto = Json.decodeFromString<RecipeDTO> (value)
+
+            datas.add(dto)
+        }
+
+        return datas
     }
 }
