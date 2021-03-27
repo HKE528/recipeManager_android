@@ -1,5 +1,8 @@
 package com.example.recipemanager
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RecipeDTO(
         var img: String? = null,
         var name: String? = null,
