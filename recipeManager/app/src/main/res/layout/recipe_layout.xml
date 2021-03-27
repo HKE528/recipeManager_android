@@ -26,7 +26,7 @@
         android:layout_toRightOf="@+id/img_recipe"
         android:layout_margin = "15dp"
         android:textSize="35dp"
-        android:text="김치찌게"
+        android:text="레시피 이름"
         >
     </TextView>
 
@@ -38,7 +38,7 @@
         android:layout_below="@+id/txt_recipe_name"
         android:layout_marginLeft="15dp"
         android:textSize="25dp"
-        android:text="한식"
+        android:text="카테고리"
         >
     </TextView>
 

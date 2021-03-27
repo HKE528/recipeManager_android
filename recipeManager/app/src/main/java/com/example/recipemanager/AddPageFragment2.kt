@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.recipe_layout.*
+import kotlinx.coroutines.delay
 
 class AddPageFragment2 : Fragment() {
     private val sharedViewModel : SharedViewModel by activityViewModels()
@@ -42,9 +43,11 @@ class AddPageFragment2 : Fragment() {
         })
 
         btn_complete.setOnClickListener{
+            (activity as MainActivity).invisibleAddView()
+
             recipeDTO.recipe = et_add_recipe.text.toString()
 
-            (activity as MainActivity).invisibleAddView()
+            DataIO(recipeDTO).saveRecipe()
 
             Toast.makeText(context, recipeDTO.name + " 등록 완료", Toast.LENGTH_SHORT).show()
         }

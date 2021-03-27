@@ -38,7 +38,6 @@ class DataIO(private val recipeDTO: RecipeDTO) {
     private val makeGson = GsonBuilder().create()
     private val typeToken : TypeToken<RecipeDTO> = object : TypeToken<RecipeDTO>() {}
 
-
     fun saveRecipe() {
         //val dataJson = makeGson.toJson(recipeDTO, typeToken.type)
         //App.prefs.setData(recipeDTO.name.toString(), dataJson)
