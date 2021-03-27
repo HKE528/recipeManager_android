@@ -13,6 +13,7 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -22,22 +23,35 @@ import kotlinx.android.synthetic.main.add_recipe_1.*
 import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.drawer_view.*
+import kotlinx.android.synthetic.main.recipe_list_view.*
 
 class MainActivity : AppCompatActivity() {
     private var isVisibleAddView = false
+    private val testArray =  ArrayList<RecipeDTO>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_layout)
 
-        initToolbar()
+        initApp()
 
-        initAddPager()
+        val test = RecipeDTO(null, "계란후라이", "간식", "ㅁㄴㅇㄹ", "ㅁㄴㅇㄹ")
+        testArray.add(test)
+
+        val listAdapter = ListViewAdapter(testArray)
+        recipe_list.adapter = listAdapter
+
 
         btn_plus.setOnClickListener {
-            visibleAddView()
             view_pager_add_recipe.currentItem = 0
+            visibleAddView()
         }
+    }
+
+    private fun initApp()
+    {
+        initToolbar()
+        initAddPager()
     }
 
     private fun initAddPager()
