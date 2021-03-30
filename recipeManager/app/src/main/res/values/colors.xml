@@ -12,4 +12,8 @@
     <color name="transparent">#00000000</color>
     <color name="charcoal">#313131</color>
     <color name="item">#E6E6FF</color>
+
+    <color name="colorPrimary">#FF9800</color>
+    <color name="colorPrimaryDark">#E65100</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>

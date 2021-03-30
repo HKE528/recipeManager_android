@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
         android:background="@color/white"
-        android:src="@drawable/ic_action_img">
+        android:src="@drawable/ic_no_image">
     </ImageView>
 
     <TextView

@@ -28,7 +28,7 @@
                 android:id="@+id/img_show"
                 android:layout_width="match_parent"
                 android:layout_height="190dp"
-                android:src="@drawable/ic_action_img"
+                android:src="@drawable/ic_no_image"
                 android:background="@drawable/edit_text_outline"
                 android:layout_marginBottom="10dp"/>
 
