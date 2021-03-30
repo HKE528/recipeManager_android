@@ -36,6 +36,10 @@ class DataSharedPreferences(context: Context) {
     fun getALL() : MutableCollection<out Any?> {
         return prefs.all.values
     }
+
+    fun deleteData(key : String) {
+        prefs.edit().remove(key).apply()
+    }
 }
 
 class DataIO() {
@@ -70,5 +74,9 @@ class DataIO() {
         }
 
         return datas
+    }
+
+    fun deleteRecipe(name : String) {
+        App.prefs.deleteData(name)
     }
 }
