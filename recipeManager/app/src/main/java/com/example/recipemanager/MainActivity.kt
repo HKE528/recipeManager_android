@@ -13,9 +13,7 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
@@ -36,13 +34,17 @@ class MainActivity : AppCompatActivity() {
 
         initApp()
 
-        //val listAdapter = ListViewAdapter(recipes)
-        //recipe_list.adapter = listAdapter
-
-
         btn_plus.setOnClickListener {
             view_pager_add_recipe.currentItem = 0
             visibleAddView()
+        }
+
+        recipe_list.setOnItemClickListener{ parent, view, position, id ->
+            val clickedItem : String? = recipes[position].name
+
+            val myIntent = Intent(this, ShowRecipe::class.java)
+            myIntent.putExtra("name", clickedItem)
+            startActivity(myIntent)
         }
     }
 
