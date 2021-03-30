@@ -43,15 +43,20 @@ class AddPageFragment2 : Fragment() {
         })
 
         btn_complete.setOnClickListener{
-            (activity as MainActivity).invisibleAddView()
+            if(recipeDTO.name != "") {
+                (activity as MainActivity).invisibleAddView()
 
-            recipeDTO.recipe = et_add_recipe.text.toString()
+                recipeDTO.recipe = et_add_recipe.text.toString()
 
-            DataIO().saveRecipe(recipeDTO)
+                DataIO().saveRecipe(recipeDTO)
 
-            (activity as MainActivity).initList()
+                (activity as MainActivity).initList()
 
-            Toast.makeText(context, recipeDTO.name + " 등록 완료", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, recipeDTO.name + " 등록 완료", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(context, "이름을 입력하세요", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
