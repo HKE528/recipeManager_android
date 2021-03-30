@@ -1,6 +1,7 @@
 package com.example.recipemanager
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.show_recipe.*
@@ -39,6 +40,7 @@ class ShowRecipe : AppCompatActivity() {
         setSupportActionBar(show_recipe_name as androidx.appcompat.widget.Toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
 
         tv_title.text = name
     }
@@ -49,5 +51,12 @@ class ShowRecipe : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.show_toolbar_menu, menu)
+
+        return super.onCreateOptionsMenu(menu)
     }
 }
