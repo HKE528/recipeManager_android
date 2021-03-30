@@ -1,8 +1,10 @@
 package com.example.recipemanager
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.show_recipe.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -45,9 +47,35 @@ class ShowRecipe : AppCompatActivity() {
         tv_title.text = name
     }
 
+    private fun delete() {
+        val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                .setMessage("정말로 삭제하시겠습니까?")
+                .setPositiveButton("네") {_, _ ->
+                    DataIO().deleteRecipe(name)
+
+                    Toast.makeText(applicationContext, "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+
+                    setResult(RESULT_OK)
+                    finish()
+                }
+                .setNegativeButton("아니오", null)
+
+        dlg.show()
+
+
+    }
+
+    private fun update() {
+        Toast.makeText(applicationContext, "수정?", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
+            
+            R.id.action_delete -> delete()
+            
+            R.id.action_update -> update()
         }
 
         return super.onOptionsItemSelected(item)
@@ -59,4 +87,6 @@ class ShowRecipe : AppCompatActivity() {
 
         return super.onCreateOptionsMenu(menu)
     }
+    
+    
 }

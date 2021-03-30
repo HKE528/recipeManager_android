@@ -2,31 +2,24 @@ package com.example.recipemanager
 
 import android.app.AlertDialog
 import android.app.TaskStackBuilder
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
-import android.widget.*
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
-import kotlinx.android.synthetic.main.add_recipe_1.*
-import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.drawer_layout.*
-import kotlinx.android.synthetic.main.drawer_view.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
 
 class MainActivity : AppCompatActivity() {
     private var isVisibleAddView = false
     //private val recipes : ArrayList<RecipeDTO> =  DataIO().loadALL()
     private lateinit var recipes : ArrayList<RecipeDTO>
+
+    private val DELETE_OK = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +37,8 @@ class MainActivity : AppCompatActivity() {
 
             val myIntent = Intent(this, ShowRecipe::class.java)
             myIntent.putExtra("name", clickedItem)
-            startActivity(myIntent)
+            //startActivity(myIntent)
+            startActivityForResult(myIntent, DELETE_OK)
         }
     }
 
@@ -99,6 +93,16 @@ class MainActivity : AppCompatActivity() {
         isVisibleAddView = true
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == RESULT_OK){
+            when (requestCode) {
+                DELETE_OK -> initList()
+            }
+        }
+    }
+
     //뒤로가기 처리
     override fun onBackPressed() {
         if(main_layout_drawer.isDrawerOpen(GravityCompat.START)){
@@ -120,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         
-        menuInflater.inflate(R.menu.toolbar_actions, menu)
+        menuInflater.inflate(R.menu.main_toolbar_actions, menu)
         
         return super.onCreateOptionsMenu(menu)
     }
