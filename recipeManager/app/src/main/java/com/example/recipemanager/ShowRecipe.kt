@@ -1,6 +1,7 @@
 package com.example.recipemanager
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +14,8 @@ import kotlinx.android.synthetic.main.toolbar.view.*
 class ShowRecipe : AppCompatActivity() {
     private lateinit var name : String
     private lateinit var recipe : RecipeDTO
+
+    private val ADD_OK = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +65,21 @@ class ShowRecipe : AppCompatActivity() {
 
         dlg.show()
 
-
     }
 
     private fun update() {
-        Toast.makeText(applicationContext, "수정?", Toast.LENGTH_SHORT).show()
+        val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                .setMessage("수정하시겠습니까?")
+                .setPositiveButton("네") {_, _ ->
+
+                    val pagerIntent = Intent(this, AddViewPager::class.java)
+                    pagerIntent.putExtra("name", name)
+                    startActivityForResult(pagerIntent, ADD_OK)
+
+                }
+                .setNegativeButton("아니오", null)
+
+        dlg.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -87,6 +100,4 @@ class ShowRecipe : AppCompatActivity() {
 
         return super.onCreateOptionsMenu(menu)
     }
-    
-    
 }

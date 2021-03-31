@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.add_recipe.*
+import kotlinx.android.synthetic.main.recipe_layout.*
 import kotlinx.android.synthetic.main.show_recipe.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -21,9 +22,15 @@ class AddViewPager : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_recipe)
 
-        name = intent.getStringExtra("name")?.toString()
-
         initActivity()
+
+        name = intent.getStringExtra("name")
+        name?.let { updateRecipe() }
+    }
+
+    private fun updateRecipe() {
+        tv_title.text = "레시피 수정"
+        recipe = DataIO().loadRecipe(name!!)
     }
 
     fun AddOK() {
@@ -36,14 +43,7 @@ class AddViewPager : AppCompatActivity() {
     }
 
     private fun initActivity(){
-        if(name != null) {
-            recipe = DataIO().loadRecipe(name!!)
-            tv_title.text = name + " 수정"
-        }
-        else {
-            tv_title.text = "레시피 추가"
-        }
-
+        tv_title.text = "레시피 추가"
 
         val pagerAdapter = PagerAdapter(supportFragmentManager)
         view_pager_add_recipe.adapter = pagerAdapter
