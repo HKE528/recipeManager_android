@@ -44,7 +44,7 @@ class AddPageFragment1 : Fragment() {
 
             sharedViewModel.select(recipeDTO)
 
-            (activity as MainActivity).view_pager_add_recipe.currentItem = 1
+            (activity as AddViewPager).view_pager_add_recipe.currentItem = 1
         }
     }
 

@@ -15,11 +15,10 @@ import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
 
 class MainActivity : AppCompatActivity() {
-    //private var isVisibleAddView = false
-    //private val recipes : ArrayList<RecipeDTO> =  DataIO().loadALL()
     private lateinit var recipes : ArrayList<RecipeDTO>
 
     private val DELETE_OK = 100
+    private val ADD_OK = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +27,9 @@ class MainActivity : AppCompatActivity() {
         initApp()
 
         btn_plus.setOnClickListener {
-            //view_pager_add_recipe.currentItem = 0
-            //visibleAddView()
-
             val pagerIntent = Intent(this, AddViewPager::class.java)
-            startActivity(pagerIntent)
+            //startActivity(pagerIntent)
+            startActivityForResult(pagerIntent, ADD_OK)
         }
 
         recipe_list.setOnItemClickListener{ parent, view, position, id ->
@@ -40,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
             val myIntent = Intent(this, ShowRecipe::class.java)
             myIntent.putExtra("name", clickedItem)
-            //startActivity(myIntent)
             startActivityForResult(myIntent, DELETE_OK)
         }
     }
@@ -48,7 +44,6 @@ class MainActivity : AppCompatActivity() {
     private fun initApp()
     {
         initToolbar()
-        //initAddPager()
         initList()
     }
 
@@ -56,11 +51,6 @@ class MainActivity : AppCompatActivity() {
     {
         recipes = DataIO().loadALL()
         recipe_list.adapter = ListViewAdapter(recipes)
-    }
-
-    private fun initAddPager()
-    {
-        view_pager_add_recipe.adapter = AddPagerAdapter(supportFragmentManager)
     }
 
     private fun initToolbar() {
@@ -71,25 +61,13 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
     }
 
-/*    fun invisibleAddView()
-    {
-        layout_add_recipe.visibility = View.INVISIBLE
-        btn_plus.visibility = View.VISIBLE
-        isVisibleAddView = false
-    }
-    private fun visibleAddView()
-    {
-        layout_add_recipe.visibility = View.VISIBLE
-        btn_plus.visibility = View.INVISIBLE
-        isVisibleAddView = true
-    }*/
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(resultCode == RESULT_OK){
             when (requestCode) {
                 DELETE_OK -> initList()
+                ADD_OK -> initList()
             }
         }
     }

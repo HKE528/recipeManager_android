@@ -2,6 +2,7 @@ package com.example.recipemanager
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -23,6 +24,15 @@ class AddViewPager : AppCompatActivity() {
         name = intent.getStringExtra("name")?.toString()
 
         initActivity()
+    }
+
+    fun AddOK() {
+
+        Toast.makeText(applicationContext, " 등록 완료", Toast.LENGTH_SHORT).show()
+
+        setResult(RESULT_OK)
+
+        finish()
     }
 
     private fun initActivity(){
