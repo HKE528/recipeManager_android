@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ShowRecipe"/>
+        <activity android:name=".AddViewPager"/>
     </application>
 
 </manifest>

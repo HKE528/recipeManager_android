@@ -44,7 +44,7 @@ class AddPageFragment2 : Fragment() {
 
         btn_complete.setOnClickListener{
             if(recipeDTO.name != "") {
-                (activity as MainActivity).invisibleAddView()
+                //(activity as MainActivity).invisibleAddView()
 
                 recipeDTO.recipe = et_add_recipe.text.toString()
 

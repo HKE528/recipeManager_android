@@ -24,11 +24,13 @@
                 android:id="@+id/layout_recipe_list_scroll">
             </include>
 
+            <!--
             <include
                 layout="@layout/add_recipe"
                 android:id="@+id/layout_add_recipe"
                 android:visibility="invisible">
             </include>
+            -->
 
             <ImageButton
                 android:id="@+id/btn_plus"

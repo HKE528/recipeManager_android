@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
 
 class MainActivity : AppCompatActivity() {
-    private var isVisibleAddView = false
+    //private var isVisibleAddView = false
     //private val recipes : ArrayList<RecipeDTO> =  DataIO().loadALL()
     private lateinit var recipes : ArrayList<RecipeDTO>
 
@@ -28,8 +28,11 @@ class MainActivity : AppCompatActivity() {
         initApp()
 
         btn_plus.setOnClickListener {
-            view_pager_add_recipe.currentItem = 0
-            visibleAddView()
+            //view_pager_add_recipe.currentItem = 0
+            //visibleAddView()
+
+            val pagerIntent = Intent(this, AddViewPager::class.java)
+            startActivity(pagerIntent)
         }
 
         recipe_list.setOnItemClickListener{ parent, view, position, id ->
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     private fun initApp()
     {
         initToolbar()
-        initAddPager()
+        //initAddPager()
         initList()
     }
 
@@ -68,19 +71,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
     }
 
-    private fun showPopupIsExit()
-    {
-        val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
-                .setMessage("정말로 레시피 추가를 종료하시겠습니까?")
-                .setPositiveButton("네") {_, _ ->
-                    invisibleAddView()
-                }
-                .setNegativeButton("아니오", null)
-
-        dlg.show()
-    }
-
-    fun invisibleAddView()
+/*    fun invisibleAddView()
     {
         layout_add_recipe.visibility = View.INVISIBLE
         btn_plus.visibility = View.VISIBLE
@@ -91,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         layout_add_recipe.visibility = View.VISIBLE
         btn_plus.visibility = View.INVISIBLE
         isVisibleAddView = true
-    }
+    }*/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -107,9 +98,6 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if(main_layout_drawer.isDrawerOpen(GravityCompat.START)){
             main_layout_drawer.closeDrawers()
-        }
-        else if(isVisibleAddView){
-            showPopupIsExit()
         }
 
         else {
