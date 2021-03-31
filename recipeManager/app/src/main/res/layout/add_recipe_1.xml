@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="10dp"
     android:background="@color/item"
+    android:id="@+id/add_recipe_1"
     >
     
     <LinearLayout

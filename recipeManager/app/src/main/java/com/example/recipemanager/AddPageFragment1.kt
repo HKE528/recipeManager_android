@@ -2,6 +2,7 @@ package com.example.recipemanager
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,8 +54,18 @@ class AddPageFragment1 : Fragment() {
                 img = null,
                 name = et_add_recipe_name.text.toString(),
                 category = et_add_recipe_category.text.toString(),
-                ingredient = et_add_recipe_material.text.toString(),
-                recipe = null
+                ingredient = et_add_recipe_material.text.toString()
         )
     }
+
+    fun setEditText(name : String) {
+        val preData : RecipeDTO = DataIO().loadRecipe(name)
+        
+        //img_recipe =
+        et_add_recipe_name.text = preData.name?.toEditable()
+        et_add_recipe_category.text = preData.category?.toEditable()
+        et_add_recipe_material.text = preData.category?.toEditable()
+    }
+
+    private fun String.toEditable() : Editable = Editable.Factory.getInstance().newEditable(this)
 }

@@ -3,6 +3,7 @@ package com.example.recipemanager
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
+import kotlinx.android.synthetic.main.add_recipe_1.*
 import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.recipe_layout.*
 import kotlinx.coroutines.delay
@@ -56,4 +58,12 @@ class AddPageFragment2 : Fragment() {
             }
         }
     }
+
+    fun setEditText(name : String) {
+        val preData : RecipeDTO = DataIO().loadRecipe(name)
+
+        et_add_recipe.text = preData.recipe?.toEditable()
+    }
+
+    private fun String.toEditable() : Editable = Editable.Factory.getInstance().newEditable(this)
 }
