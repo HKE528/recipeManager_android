@@ -3,6 +3,7 @@ package com.example.recipemanager
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +18,9 @@ import kotlinx.android.synthetic.main.add_recipe_1.*
 import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.recipe_layout.*
 import java.nio.channels.Selector
+import kotlin.math.log
 
-class AddPageFragment1 : Fragment() {
+class AddPageFragment1(val name : String? = null) : Fragment() {
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private lateinit var recipeDTO: RecipeDTO
 
@@ -32,13 +34,10 @@ class AddPageFragment1 : Fragment() {
             savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.add_recipe_1, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        name?.let { setEditText() }
 
         btn_next.setOnClickListener(){item ->
             setDTO()
@@ -50,22 +49,19 @@ class AddPageFragment1 : Fragment() {
     }
 
     private fun setDTO() {
-        recipeDTO = RecipeDTO(
-                img = null,
-                name = et_add_recipe_name.text.toString(),
-                category = et_add_recipe_category.text.toString(),
-                ingredient = et_add_recipe_material.text.toString()
-        )
+        with(recipeDTO) {
+            name = et_add_recipe_name.text.toString()
+            category = et_add_recipe_category.text.toString()
+            ingredient = et_add_recipe_material.text.toString()
+        }
     }
 
-    fun setEditText(name : String) {
-        val preData : RecipeDTO = DataIO().loadRecipe(name)
-        
-        //img_recipe =
-        et_add_recipe_name.text = preData.name?.toEditable()
-        et_add_recipe_category.text = preData.category?.toEditable()
-        et_add_recipe_material.text = preData.category?.toEditable()
-    }
+    private fun setEditText() {
+        recipeDTO = DataIO().loadRecipe(name!!)
 
-    private fun String.toEditable() : Editable = Editable.Factory.getInstance().newEditable(this)
+        //img_add_recipe.setText(recipeDTO.name)
+        et_add_recipe_name.setText(recipeDTO.name)
+        et_add_recipe_category.setText(recipeDTO.category)
+        et_add_recipe_material.setText(recipeDTO.ingredient)
+    }
 }

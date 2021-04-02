@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,17 +32,15 @@ class AddPageFragment2 : Fragment() {
             savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.add_recipe_2, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         sharedViewModel.selected.observe(viewLifecycleOwner, Observer { item ->
             recipeDTO = item
+
+            recipeDTO.recipe?.let {
+                setEditText()
+            }
         })
 
         btn_complete.setOnClickListener{
@@ -59,11 +58,7 @@ class AddPageFragment2 : Fragment() {
         }
     }
 
-    fun setEditText(name : String) {
-        val preData : RecipeDTO = DataIO().loadRecipe(name)
-
-        et_add_recipe.text = preData.recipe?.toEditable()
+    private fun setEditText() {
+        et_add_recipe.setText(recipeDTO.recipe)
     }
-
-    private fun String.toEditable() : Editable = Editable.Factory.getInstance().newEditable(this)
 }
