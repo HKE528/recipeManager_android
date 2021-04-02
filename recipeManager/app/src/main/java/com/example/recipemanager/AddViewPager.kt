@@ -4,19 +4,19 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.*
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.add_recipe.*
+import kotlinx.android.synthetic.main.add_recipe_1.*
 import kotlinx.android.synthetic.main.recipe_layout.*
 import kotlinx.android.synthetic.main.show_recipe.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class AddViewPager : AppCompatActivity() {
+class AddViewPager : FragmentActivity() {
     private var name : String? = null
+    
     private lateinit var recipe : RecipeDTO
+    private lateinit var pagerAdapter : PagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +30,11 @@ class AddViewPager : AppCompatActivity() {
 
     private fun updateRecipe() {
         tv_title.text = "레시피 수정"
-        recipe = DataIO().loadRecipe(name!!)
     }
 
-    fun AddOK() {
+    fun AddOK(text:String) {
 
-        Toast.makeText(applicationContext, " 등록 완료", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, text + " 완료", Toast.LENGTH_SHORT).show()
 
         setResult(RESULT_OK)
 
@@ -45,7 +44,7 @@ class AddViewPager : AppCompatActivity() {
     private fun initActivity(){
         tv_title.text = "레시피 추가"
 
-        val pagerAdapter = PagerAdapter(supportFragmentManager)
+        pagerAdapter = PagerAdapter(supportFragmentManager)
         view_pager_add_recipe.adapter = pagerAdapter
     }
 
@@ -62,7 +61,7 @@ class AddViewPager : AppCompatActivity() {
     private fun showPopupIsExit()
     {
         val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
-                .setMessage("정말로 레시피 추가를 종료하시겠습니까?")
+                .setMessage("정말로 작업을 종료하시겠습니까?")
                 .setPositiveButton("네") {_, _ ->
                     finish()
                 }
@@ -71,11 +70,11 @@ class AddViewPager : AppCompatActivity() {
         dlg.show()
     }
 
-    private inner class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    private inner class PagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
             return when(position) {
-                0 -> AddPageFragment1()
+                0 -> AddPageFragment1(name)
 
                 else -> AddPageFragment2()
             }
