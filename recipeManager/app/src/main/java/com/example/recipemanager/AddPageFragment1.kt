@@ -22,7 +22,7 @@ import kotlin.math.log
 
 class AddPageFragment1(val name : String? = null) : Fragment() {
     private val sharedViewModel : SharedViewModel by activityViewModels()
-    private lateinit var recipeDTO: RecipeDTO
+    private var recipeDTO: RecipeDTO = RecipeDTO()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

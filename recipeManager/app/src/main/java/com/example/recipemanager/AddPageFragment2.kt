@@ -26,6 +26,8 @@ class AddPageFragment2 : Fragment() {
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private lateinit var recipeDTO: RecipeDTO
 
+    private var isUpdate = false
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -40,6 +42,7 @@ class AddPageFragment2 : Fragment() {
 
             recipeDTO.recipe?.let {
                 setEditText()
+                isUpdate = true
             }
         })
 
@@ -50,7 +53,8 @@ class AddPageFragment2 : Fragment() {
 
                 DataIO().saveRecipe(recipeDTO)
 
-                (activity as AddViewPager).AddOK()
+                if(isUpdate)    (activity as AddViewPager).AddOK("수정")
+                else            (activity as AddViewPager).AddOK("등록")
             }
             else {
                 Toast.makeText(context, "이름을 입력하세요", Toast.LENGTH_SHORT).show()
