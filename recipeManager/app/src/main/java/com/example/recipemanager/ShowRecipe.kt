@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.toolbar.view.*
 class ShowRecipe : AppCompatActivity() {
     private lateinit var name : String
     private lateinit var recipe : RecipeDTO
+    private var isUpdate = false
 
     private val UPDATE_OK = 300
 
@@ -21,18 +22,16 @@ class ShowRecipe : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.show_recipe)
 
-        /*name = intent.getStringExtra("name").toString()
-        recipe = DataIO().loadRecipe(name)*/
-
-        /*txt_show_ingredient.text = recipe.ingredient?.let { makeString(it) }
-        txt_show_recipe.text = recipe.recipe?.let { makeString(it) }*/
-
         initView()
 
         initToolbar()
     }
+    private fun exitActivity() {
+        setResult(RESULT_OK)
+        finish()
+    }
 
-    fun initView() {
+    private fun initView() {
         name = intent.getStringExtra("name").toString()
         recipe = DataIO().loadRecipe(name)
 
@@ -68,8 +67,7 @@ class ShowRecipe : AppCompatActivity() {
 
                     Toast.makeText(applicationContext, "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
 
-                    setResult(RESULT_OK)
-                    finish()
+                    exitActivity()
                 }
                 .setNegativeButton("아니오", null)
 
@@ -98,7 +96,10 @@ class ShowRecipe : AppCompatActivity() {
         //인텐트 이벤트 처리
         if(resultCode == RESULT_OK){
             when (requestCode) {
-                UPDATE_OK -> initView()
+                UPDATE_OK -> {
+                    initView()
+                    isUpdate = true
+                }
             }
         }
     }
@@ -120,5 +121,13 @@ class ShowRecipe : AppCompatActivity() {
         menuInflater.inflate(R.menu.show_toolbar_menu, menu)
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onBackPressed() {
+        if(isUpdate) {
+            exitActivity()
+        }
+
+        super.onBackPressed()
     }
 }
