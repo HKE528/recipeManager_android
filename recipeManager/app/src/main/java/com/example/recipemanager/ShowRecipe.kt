@@ -15,19 +15,29 @@ class ShowRecipe : AppCompatActivity() {
     private lateinit var name : String
     private lateinit var recipe : RecipeDTO
 
-    private val ADD_OK = 200
+    private val UPDATE_OK = 300
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.show_recipe)
 
+        /*name = intent.getStringExtra("name").toString()
+        recipe = DataIO().loadRecipe(name)*/
+
+        /*txt_show_ingredient.text = recipe.ingredient?.let { makeString(it) }
+        txt_show_recipe.text = recipe.recipe?.let { makeString(it) }*/
+
+        initView()
+
+        initToolbar()
+    }
+
+    fun initView() {
         name = intent.getStringExtra("name").toString()
         recipe = DataIO().loadRecipe(name)
 
         txt_show_ingredient.text = recipe.ingredient?.let { makeString(it) }
         txt_show_recipe.text = recipe.recipe?.let { makeString(it) }
-
-        initToolbar()
     }
 
     private fun makeString(text : String) : String {
@@ -74,12 +84,23 @@ class ShowRecipe : AppCompatActivity() {
 
                     val pagerIntent = Intent(this, AddViewPager::class.java)
                     pagerIntent.putExtra("name", name)
-                    startActivityForResult(pagerIntent, ADD_OK)
+                    startActivityForResult(pagerIntent, UPDATE_OK)
 
                 }
                 .setNegativeButton("아니오", null)
 
         dlg.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        //인텐트 이벤트 처리
+        if(resultCode == RESULT_OK){
+            when (requestCode) {
+                UPDATE_OK -> initView()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
