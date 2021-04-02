@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
+        android:title="Search"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_menu"
+        android:icon="@drawable/ic_action_menu"
+        android:title="Menu"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/select_items"
+                android:title="다중 삭제"
+                app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/classify_category"
+                android:title="종류별 보기"
+                app:showAsAction="ifRoom"/>
+        </menu>
+
+    </item>
+</menu>
