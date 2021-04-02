@@ -72,7 +72,6 @@ class ShowRecipe : AppCompatActivity() {
                 .setNegativeButton("아니오", null)
 
         dlg.show()
-
     }
 
     private fun update() {

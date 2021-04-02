@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
 
         btn_plus.setOnClickListener {
             val pagerIntent = Intent(this, AddViewPager::class.java)
-            //startActivity(pagerIntent)
             startActivityForResult(pagerIntent, ADD_OK)
         }
 
@@ -54,11 +53,10 @@ class MainActivity : AppCompatActivity() {
 
             popupMenu.setOnMenuItemClickListener {
                 when (it?.itemId) {
-                    R.id.action_update ->
-                        Toast.makeText(applicationContext, clickedItem + " 수정", Toast.LENGTH_SHORT).show()
+                    R.id.action_update -> update(clickedItem!!)
                     
-                    R.id.action_delete ->
-                        Toast.makeText(applicationContext, clickedItem + " 삭제", Toast.LENGTH_SHORT).show()
+                    R.id.action_delete -> delete(clickedItem!!)
+
                 }
 
                 super.onContextItemSelected(it)
@@ -68,6 +66,36 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+    }
+    private fun update(name : String) {
+        val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                .setMessage("수정하시겠습니까?")
+                .setPositiveButton("네") {_, _ ->
+
+                    val pagerIntent = Intent(this, AddViewPager::class.java)
+                    pagerIntent.putExtra("name", name)
+                    startActivityForResult(pagerIntent, UPDATE_OK)
+
+                }
+                .setNegativeButton("아니오", null)
+
+        dlg.show()
+    }
+
+    private fun delete(name : String) {
+        val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                .setMessage("정말로 삭제하시겠습니까?")
+                .setPositiveButton("네") {_, _ ->
+                    DataIO().deleteRecipe(name)
+
+                    Toast.makeText(applicationContext, "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+
+                    initList()
+                }
+                .setNegativeButton("아니오", null)
+
+        dlg.show()
+
     }
 
     private fun initApp()
@@ -89,13 +117,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
     }
-    
-/*    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        //리스트뷰에 컨텍스트 메뉴 추가
-        menuInflater.inflate(R.menu.long_click_menu, menu)
-
-        super.onCreateContextMenu(menu, v, menuInfo)
-    }*/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
