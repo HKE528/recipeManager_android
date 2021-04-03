@@ -21,6 +21,9 @@ import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recipes : ArrayList<RecipeDTO>
+    
+    //private lateinit var categorySet : MutableList<String>
+    private lateinit var categorySet : MutableSet<String>
     private var backPressedTime : Long = 0
 
     private val UPDATE_OK = 300
@@ -110,6 +113,10 @@ class MainActivity : AppCompatActivity() {
     {
         recipes = DataIO().loadALL()
         recipe_list.adapter = ListViewAdapter(recipes)
+        
+        categorySet = mutableSetOf<String>("ALL", "미분류")
+        recipes.forEach { categorySet.add(it.category.toString()) }
+
     }
 
     private fun initToolbar() {
@@ -174,10 +181,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.multiply_delete ->
-                Toast.makeText(applicationContext, "다중 삭제", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "다중 삭제 공사중..", Toast.LENGTH_SHORT).show()
 
-            R.id.classify_category ->
-                Toast.makeText(applicationContext, "분류별 표시", Toast.LENGTH_SHORT).show()
+            R.id.classify_category -> {
+                val classifyDialog = ClassifyDialog(this)
+
+                classifyDialog.show(categorySet.toCollection(ArrayList()))
+            }
 
         }
         return super.onOptionsItemSelected(item)
