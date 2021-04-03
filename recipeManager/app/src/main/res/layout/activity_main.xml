@@ -14,23 +14,18 @@
     <LinearLayout
         android:id="@+id/layout_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <include
-                layout="@layout/recipe_list_view"
-                android:id="@+id/layout_recipe_list_scroll">
-            </include>
+                android:id="@+id/layout_recipe_list_scroll"
+                layout="@layout/recipe_list_view">
 
-            <!--
-            <include
-                layout="@layout/add_recipe"
-                android:id="@+id/layout_add_recipe"
-                android:visibility="invisible">
             </include>
-            -->
 
             <ImageButton
                 android:id="@+id/btn_plus"
