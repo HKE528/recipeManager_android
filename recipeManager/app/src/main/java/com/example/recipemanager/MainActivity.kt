@@ -17,9 +17,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recipes : ArrayList<RecipeDTO>
+    private var backPressedTime : Long = 0
 
     private val UPDATE_OK = 300
     private val ADD_OK = 200
@@ -118,6 +120,16 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_action_open_nav)
     }
 
+    private fun appClose() {
+        if ( System.currentTimeMillis() > backPressedTime + 2000) {
+            backPressedTime = System.currentTimeMillis()
+            Toast.makeText(this, "한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -137,7 +149,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         else {
-            super.onBackPressed()
+            appClose()
         }
     }
     
@@ -160,6 +172,13 @@ class MainActivity : AppCompatActivity() {
             android.R.id.home -> {
                 main_layout_drawer.openDrawer(GravityCompat.START)
             }
+
+            R.id.multiply_delete ->
+                Toast.makeText(applicationContext, "다중 삭제", Toast.LENGTH_SHORT).show()
+
+            R.id.classify_category ->
+                Toast.makeText(applicationContext, "분류별 표시", Toast.LENGTH_SHORT).show()
+
         }
         return super.onOptionsItemSelected(item)
     }

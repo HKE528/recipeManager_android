@@ -82,4 +82,6 @@ class AddViewPager : FragmentActivity() {
 
         override fun getCount(): Int = 2
     }
+
+
 }
