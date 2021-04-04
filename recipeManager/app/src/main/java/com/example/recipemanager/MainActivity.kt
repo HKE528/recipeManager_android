@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.layout_select_category.view.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
@@ -112,12 +113,19 @@ class MainActivity : AppCompatActivity() {
 
     fun initList()
     {
+        tv_title.text = "ALL"
+
         recipes = DataIO().loadALL()
-        recipe_list.adapter = ListViewAdapter(recipes)
         
         categorySet = mutableSetOf<String>("ALL", "미분류")
         recipes.forEach { categorySet.add(it.category.toString()) }
 
+        //recipe_list.adapter = ListViewAdapter(recipes)
+        refreshList(recipes)
+    }
+
+    fun refreshList(list : ArrayList<RecipeDTO>) {
+        recipe_list.adapter = ListViewAdapter(list)
     }
 
     private fun initToolbar() {
@@ -197,7 +205,7 @@ class MainActivity : AppCompatActivity() {
                         .setTitle("분류 선택")
                         .setNegativeButton("취소", null)
                         .setPositiveButton("확인") { _, _ ->
-                            Toast.makeText(this, sp.selectedItem.toString(), Toast.LENGTH_SHORT).show()
+                            classifyList(sp.selectedItem.toString())
                         }
                         .show()
             }
@@ -205,8 +213,21 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun test(text:String) {
-        Log.i("dig", text)
+    fun classifyList(category: CharSequence) {
+        if (category == "ALL") {
+            initList()
+        }
+        else {
+            tv_title.text = category
+
+            val list = ArrayList<RecipeDTO>()
+
+            recipes.forEach {
+                if (it.category == category)    { list.add(it) }
+            }
+
+            refreshList(list)
+        }
     }
 }
 
