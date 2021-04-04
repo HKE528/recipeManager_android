@@ -10,19 +10,20 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.PopupMenu
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.drawer_layout.*
+import kotlinx.android.synthetic.main.layout_select_category.view.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recipes : ArrayList<RecipeDTO>
-    
-    //private lateinit var categorySet : MutableList<String>
     private lateinit var categorySet : MutableSet<String>
     private var backPressedTime : Long = 0
 
@@ -180,17 +181,32 @@ class MainActivity : AppCompatActivity() {
                 main_layout_drawer.openDrawer(GravityCompat.START)
             }
 
+            //다중 삭제
             R.id.multiply_delete ->
                 Toast.makeText(applicationContext, "다중 삭제 공사중..", Toast.LENGTH_SHORT).show()
 
+            //툴바 분류 보기
             R.id.classify_category -> {
-                val classifyDialog = ClassifyDialog(this)
+                val dView = layoutInflater.inflate(R.layout.layout_select_category, null)
+                val sp : Spinner = dView.spinner_category
 
-                classifyDialog.show(categorySet.toCollection(ArrayList()))
+                sp.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categorySet.toCollection(ArrayList<String>()))
+
+                AlertDialog.Builder(this)
+                        .setView(dView)
+                        .setTitle("분류 선택")
+                        .setNegativeButton("취소", null)
+                        .setPositiveButton("확인") { _, _ ->
+                            Toast.makeText(this, sp.selectedItem.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                        .show()
             }
-
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun test(text:String) {
+        Log.i("dig", text)
     }
 }
 
