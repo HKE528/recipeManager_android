@@ -51,7 +51,8 @@ class AddPageFragment1(val name : String? = null) : Fragment() {
     private fun setDTO() {
         with(recipeDTO) {
             name = et_add_recipe_name.text.toString()
-            category = et_add_recipe_category.text.toString()
+            //category = et_add_recipe_category.text.toString()
+            category = if (et_add_recipe_category.text.toString() == "") "미분류" else et_add_recipe_category.text.toString()
             ingredient = et_add_recipe_material.text.toString()
         }
     }
