@@ -1,7 +1,15 @@
 package com.example.recipemanager
 
+import android.app.Activity
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
+import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,12 +25,20 @@ import kotlinx.android.synthetic.main.add_recipe.*
 import kotlinx.android.synthetic.main.add_recipe_1.*
 import kotlinx.android.synthetic.main.add_recipe_2.*
 import kotlinx.android.synthetic.main.recipe_layout.*
+import kotlinx.coroutines.processNextEventInCurrentThread
+import java.io.InputStream
+import java.lang.Exception
 import java.nio.channels.Selector
+import java.security.cert.CertPath
 import kotlin.math.log
 
 class AddPageFragment1(val name : String? = null) : Fragment() {
     private val sharedViewModel : SharedViewModel by activityViewModels()
+
     private var recipeDTO: RecipeDTO = RecipeDTO()
+    private var imageUri: Uri? = null
+
+    private val LOAD_IMG = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +53,11 @@ class AddPageFragment1(val name : String? = null) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        img_add_recipe.setOnClickListener {
+            //갤러리 오픈
+            openGallery()
+        }
+
         name?.let { setEditText() }
 
         btn_next.setOnClickListener(){item ->
@@ -48,8 +69,40 @@ class AddPageFragment1(val name : String? = null) : Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == RESULT_OK) {
+
+            when (requestCode) {
+                LOAD_IMG -> {
+                    imageUri = data?.data
+
+                    try {
+                        val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, imageUri)
+                        img_add_recipe.setImageBitmap(bitmap)
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(context, "이미지 로드 실패", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            }
+
+        }
+
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, LOAD_IMG)
+    }
+
     private fun setDTO() {
         with(recipeDTO) {
+            img = imageUri?.toString()
             name = et_add_recipe_name.text.toString()
             //category = et_add_recipe_category.text.toString()
             category = if (et_add_recipe_category.text.toString() == "") "미분류" else et_add_recipe_category.text.toString()
