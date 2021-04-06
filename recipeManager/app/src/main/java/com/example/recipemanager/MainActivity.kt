@@ -6,12 +6,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.text.TextUtils
 import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
@@ -19,6 +22,9 @@ import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.layout_select_category.view.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.io.File
+import java.lang.Exception
+import java.nio.file.Files
 import java.util.jar.Manifest
 import kotlin.properties.Delegates
 
@@ -117,7 +123,9 @@ class MainActivity : AppCompatActivity() {
         val permissions = arrayOf(
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.CAMERA
         )
+
         var rejectedPermissions = ArrayList<String>()
 
         permissions.forEach {
@@ -130,6 +138,10 @@ class MainActivity : AppCompatActivity() {
             val array = arrayOfNulls<String>(rejectedPermissions.size)
 
             requestPermissions(rejectedPermissions.toArray(array), REQ_PREMISSION)
+        } else {
+            Toast.makeText(this, "권한 모두 허용", Toast.LENGTH_SHORT).show()
+            ActivityCompat.requestPermissions(this, permissions, REQ_PREMISSION)
+            //makeDir()
         }
 
         initToolbar()
@@ -169,6 +181,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun makeDir() {
+        val root = Environment.getExternalStorageDirectory().absolutePath
+        val dirName = "/RecipeManager/Image/"
+        
+        val dir = File(root + dirName)
+
+        try {
+            if (!dir.exists()) {
+                if (dir.mkdirs()) {
+                    Log.i("mkdir", "폴더 만들기 성공")
+                } else {
+                    Log.i("mkdir", "폴더 만들기 실패")
+                    finish()
+                }
+            }
+        } catch (e : Exception) {
+            e.printStackTrace()
+        }
+    }
+
     //권한 요청 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -179,7 +211,9 @@ class MainActivity : AppCompatActivity() {
 
         when (requestCode) {
             REQ_PREMISSION -> {
-                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //makeDir()
+                } else {
                     finish()
                 }
             }
