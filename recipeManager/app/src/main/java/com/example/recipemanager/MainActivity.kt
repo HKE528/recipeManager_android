@@ -3,6 +3,7 @@ package com.example.recipemanager
 import android.app.AlertDialog
 import android.app.TaskStackBuilder
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,10 +11,7 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.PopupMenu
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_recipe.*
@@ -21,15 +19,18 @@ import kotlinx.android.synthetic.main.drawer_layout.*
 import kotlinx.android.synthetic.main.layout_select_category.view.*
 import kotlinx.android.synthetic.main.recipe_list_view.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.jar.Manifest
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var recipes : ArrayList<RecipeDTO>
-    private lateinit var categorySet : MutableSet<String>
-    private var backPressedTime : Long = 0
+    private lateinit var recipes: ArrayList<RecipeDTO>
+    private lateinit var categorySet: MutableSet<String>
+    private var backPressedTime: Long = 0
+    private var isMultiChoice: Boolean = false
 
     private val UPDATE_OK = 300
     private val ADD_OK = 200
+    private val REQ_PREMISSION = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,25 +44,30 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(pagerIntent, ADD_OK)
         }
 
-        recipe_list.setOnItemClickListener{ parent, view, position, id ->
-            val clickedItem : String? = recipes[position].name
 
-            val myIntent = Intent(this, ShowRecipe::class.java)
-            myIntent.putExtra("name", clickedItem)
-            startActivityForResult(myIntent, UPDATE_OK)
+        recipe_list.setOnItemClickListener { parent, view, position, id ->
+
+            if(!isMultiChoice) {
+                val clickedItem: String? = recipes[position].name
+
+                val myIntent = Intent(this, ShowRecipe::class.java)
+                myIntent.putExtra("name", clickedItem)
+                startActivityForResult(myIntent, UPDATE_OK)
+            }
+
         }
 
         recipe_list.setOnItemLongClickListener { parent, view, position, id ->
-            val clickedItem : String? = recipes[position].name
 
+            val clickedItem: String? = recipes[position].name
 
-            val popupMenu : PopupMenu = PopupMenu(this, view)
+            val popupMenu: PopupMenu = PopupMenu(this, view)
             menuInflater.inflate(R.menu.long_click_menu, popupMenu.menu)
 
             popupMenu.setOnMenuItemClickListener {
                 when (it?.itemId) {
                     R.id.action_update -> update(clickedItem!!)
-                    
+
                     R.id.action_delete -> delete(clickedItem!!)
 
                 }
@@ -69,15 +75,16 @@ class MainActivity : AppCompatActivity() {
                 super.onContextItemSelected(it)
             }
 
-            popupMenu.show()
+            if (!isMultiChoice)  popupMenu.show()
 
             true
         }
     }
-    private fun update(name : String) {
+
+    private fun update(name: String) {
         val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
                 .setMessage("수정하시겠습니까?")
-                .setPositiveButton("네") {_, _ ->
+                .setPositiveButton("네") { _, _ ->
 
                     val pagerIntent = Intent(this, AddViewPager::class.java)
                     pagerIntent.putExtra("name", name)
@@ -89,10 +96,10 @@ class MainActivity : AppCompatActivity() {
         dlg.show()
     }
 
-    private fun delete(name : String) {
+    private fun delete(name: String) {
         val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
                 .setMessage("정말로 삭제하시겠습니까?")
-                .setPositiveButton("네") {_, _ ->
+                .setPositiveButton("네") { _, _ ->
                     DataIO().deleteRecipe(name)
 
                     Toast.makeText(applicationContext, "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
@@ -105,18 +112,35 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initApp()
-    {
+    private fun initApp() {
+        //권한 요청
+        val permissions = arrayOf(
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        )
+        var rejectedPermissions = ArrayList<String>()
+
+        permissions.forEach {
+            if (checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED) {
+                rejectedPermissions.add(it)
+            }
+        }
+
+        if(rejectedPermissions.isNotEmpty()) {
+            val array = arrayOfNulls<String>(rejectedPermissions.size)
+
+            requestPermissions(rejectedPermissions.toArray(array), REQ_PREMISSION)
+        }
+
         initToolbar()
         initList()
     }
 
-    fun initList()
-    {
+    fun initList() {
         tv_title.text = "ALL"
 
         recipes = DataIO().loadALL()
-        
+
         categorySet = mutableSetOf<String>("ALL", "미분류")
         recipes.forEach { categorySet.add(it.category.toString()) }
 
@@ -124,8 +148,8 @@ class MainActivity : AppCompatActivity() {
         refreshList(recipes)
     }
 
-    fun refreshList(list : ArrayList<RecipeDTO>) {
-        recipe_list.adapter = ListViewAdapter(list)
+    fun refreshList(list: ArrayList<RecipeDTO>) {
+        recipe_list.adapter = ListViewAdapter(items = list)
     }
 
     private fun initToolbar() {
@@ -137,12 +161,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun appClose() {
-        if ( System.currentTimeMillis() > backPressedTime + 2000) {
+        if (System.currentTimeMillis() > backPressedTime + 2000) {
             backPressedTime = System.currentTimeMillis()
             Toast.makeText(this, "한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
-        }
-        else {
+        } else {
             super.onBackPressed()
+        }
+    }
+
+    //권한 요청 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            REQ_PREMISSION -> {
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    finish()
+                }
+            }
         }
     }
 
@@ -150,7 +190,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         //인텐트 이벤트 처리
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 UPDATE_OK -> initList()
                 ADD_OK -> initList()
@@ -160,24 +200,22 @@ class MainActivity : AppCompatActivity() {
 
     //뒤로가기 처리
     override fun onBackPressed() {
-        if(main_layout_drawer.isDrawerOpen(GravityCompat.START)){
+        if (main_layout_drawer.isDrawerOpen(GravityCompat.START)) {
             main_layout_drawer.closeDrawers()
-        }
-
-        else {
+        } else {
             appClose()
         }
     }
-    
+
     override fun onCreateNavigateUpTaskStack(builder: TaskStackBuilder?) {
-        
+
         super.onCreateNavigateUpTaskStack(builder)
     }
-    
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        
+
         menuInflater.inflate(R.menu.main_toolbar_actions, menu)
-        
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -190,13 +228,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             //다중 삭제
-            R.id.multiply_delete ->
-                Toast.makeText(applicationContext, "다중 삭제 공사중..", Toast.LENGTH_SHORT).show()
-
+            R.id.multiply_delete -> {
+                multiChoice()
+            }
             //툴바 분류 보기
             R.id.classify_category -> {
                 val dView = layoutInflater.inflate(R.layout.layout_select_category, null)
-                val sp : Spinner = dView.spinner_category
+                val sp: Spinner = dView.spinner_category
 
                 sp.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categorySet.toCollection(ArrayList<String>()))
 
@@ -213,21 +251,30 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun classifyList(category: CharSequence) {
+    private fun classifyList(category: CharSequence) {
         if (category == "ALL") {
             initList()
-        }
-        else {
+        } else {
             tv_title.text = category
 
             val list = ArrayList<RecipeDTO>()
 
             recipes.forEach {
-                if (it.category == category)    { list.add(it) }
+                if (it.category == category) {
+                    list.add(it)
+                }
             }
 
             refreshList(list)
         }
+    }
+
+    private fun multiChoice() {
+        /*isMultiChoice = true
+        recipe_list.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+        recipe_list.adapter = ListViewAdapter*/
+
+        Toast.makeText(applicationContext, "다중 삭제 공사중..", Toast.LENGTH_SHORT).show()
     }
 }
 
