@@ -28,9 +28,9 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@color/white"
-            android:src="@drawable/ic_no_image"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_no_image" />
 
-            />
     </LinearLayout>
 
     <LinearLayout
