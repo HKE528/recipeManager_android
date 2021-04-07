@@ -76,7 +76,7 @@ class ShowRecipe : AppCompatActivity() {
         val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
                 .setMessage("정말로 삭제하시겠습니까?")
                 .setPositiveButton("네") {_, _ ->
-                    DataIO().deleteRecipe(name)
+                    DataIO().deleteRecipe(cacheDir.toString(), name)
 
                     Toast.makeText(applicationContext, "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
 

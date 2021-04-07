@@ -85,8 +85,21 @@ class DataIO() {
         return datas
     }
 
-    fun deleteRecipe(name : String) {
+    fun deleteRecipe(cache : String? = null, name : String) {
         App.prefs.deleteData(name)
+        
+        cache?.let { 
+            val fileName = "$name.jpg"
+            val file = File(cache)
+            val files = file.listFiles()
+            
+            files.forEach { 
+                if (it.name.equals(fileName) ) {
+                    it.delete()
+                    Log.i("io", "$fileName 삭제완료")
+                }
+            }
+        }
     }
 
     fun loadImage(imgPath : String) : Bitmap? {
