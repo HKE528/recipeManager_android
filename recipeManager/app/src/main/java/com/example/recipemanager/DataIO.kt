@@ -3,11 +3,20 @@ package com.example.recipemanager
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.provider.MediaStore
+import android.util.Log
+import androidx.core.net.toUri
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.lang.Exception
 
 class App : Application() {
 
@@ -78,5 +87,25 @@ class DataIO() {
 
     fun deleteRecipe(name : String) {
         App.prefs.deleteData(name)
+    }
+
+    fun loadImage(imgPath : String) : Bitmap? {
+        //val fileName = "$name.jpg"
+        //val imgPath : String = "$cacheDir/$fileName"
+        var img : Bitmap? = null
+
+        try {
+            img = BitmapFactory.decodeFile(imgPath)
+
+            Log.i("io", "이미지 로드 성공")
+            Log.i("io", img.toString())
+        }catch (e : FileNotFoundException) {
+            Log.i("io", "이미지 없음")
+        }catch (e : Exception) {
+            e.stackTrace
+            Log.i("io", "이미지 로드 실패")
+        }
+
+        return img
     }
 }
