@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun refreshList(list: ArrayList<RecipeDTO>) {
-        recipe_list.adapter = ListViewAdapter(items = list)
+        recipe_list.adapter = ListViewAdapter(context = this, items = list)
     }
 
     private fun initToolbar() {
