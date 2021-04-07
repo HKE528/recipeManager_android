@@ -2,7 +2,10 @@ package com.example.recipemanager
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -10,11 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.show_recipe.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
+import java.io.FileNotFoundException
+import java.lang.Exception
 
 class ShowRecipe : AppCompatActivity() {
     private lateinit var name : String
     private lateinit var recipe : RecipeDTO
     private var isUpdate = false
+    private var img : Bitmap? = null
 
     private val UPDATE_OK = 300
 
@@ -37,6 +43,13 @@ class ShowRecipe : AppCompatActivity() {
 
         txt_show_ingredient.text = recipe.ingredient?.let { makeString(it) }
         txt_show_recipe.text = recipe.recipe?.let { makeString(it) }
+
+        val imgPath = "$cacheDir/$name.jpg"
+        img = DataIO().loadImage(imgPath)
+
+        img?.let {
+            img_show.setImageBitmap(it)
+        }
     }
 
     private fun makeString(text : String) : String {
