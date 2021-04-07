@@ -52,7 +52,7 @@ class AddPageFragment2 : Fragment() {
 
         sharedViewModel.selected.observe(viewLifecycleOwner, Observer { item ->
             recipeDTO = item
-            
+
             recipeDTO.recipe?.let {
                 setEditText()
                 isUpdate = true
