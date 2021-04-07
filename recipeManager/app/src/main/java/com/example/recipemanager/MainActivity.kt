@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 
             requestPermissions(rejectedPermissions.toArray(array), REQ_PREMISSION)
         } else {
-            Toast.makeText(this, "권한 모두 허용", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "권한 모두 허용", Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(this, permissions, REQ_PREMISSION)
             //makeDir()
         }
